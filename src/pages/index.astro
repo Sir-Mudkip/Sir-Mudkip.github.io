@@ -1,0 +1,114 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Button from '../components/Button.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import PostCard from '../components/PostCard.astro';
+import Section from '../components/Section.astro';
+import { AUTHOR_NAME, SITE_DESCRIPTION, SITE_TAGLINE, SITE_TITLE } from '../consts';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const [featured, ...rest] = posts;
+const recent = rest.slice(0, 3);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<!-- Hero -->
+			<section class="aurora-bg relative overflow-hidden">
+				<div class="pointer-events-none absolute inset-0 opacity-60 [background:radial-gradient(600px_300px_at_50%_0%,var(--accent-soft),transparent_70%)]"></div>
+				<Section width="wide" class="relative py-24 sm:py-32">
+					<p class="eyebrow mb-5">A blog by {AUTHOR_NAME}</p>
+					<h1 class="font-display max-w-3xl text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">
+						Notes from the <span class="text-[var(--accent)]" style="text-shadow: 0 0 40px var(--accent);">marsh</span>.
+					</h1>
+					<p class="mt-6 max-w-xl text-lg leading-relaxed text-[var(--text-muted)]">
+						{SITE_TAGLINE}
+					</p>
+					<div class="mt-8 flex flex-wrap gap-3">
+						<Button href="/blog" variant="primary">
+							Read the blog
+							<span aria-hidden="true">→</span>
+						</Button>
+						<Button href="/about" variant="ghost">About me</Button>
+					</div>
+				</Section>
+			</section>
+
+			<!-- Featured post -->
+			{featured && (
+				<Section width="wide" class="py-16">
+					<div class="mb-8 flex items-end justify-between gap-4">
+						<div>
+							<p class="eyebrow mb-2">Featured</p>
+							<h2 class="font-display text-3xl font-semibold sm:text-4xl">Newest Post</h2>
+						</div>
+						<a href="/blog" class="text-sm font-semibold text-[var(--accent)] no-underline hover:underline">All posts →</a>
+					</div>
+					<PostCard post={featured} featured />
+				</Section>
+			)}
+
+			<!-- Recent posts -->
+			{recent.length > 0 && (
+				<Section width="wide" class="py-16">
+					<p class="eyebrow mb-2">More writing</p>
+					<h2 class="font-display mb-10 text-3xl font-semibold sm:text-4xl">Recent posts</h2>
+					<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+						{recent.map((p) => <PostCard post={p} />)}
+					</div>
+				</Section>
+			)}
+
+			<!-- About snippet -->
+			<Section width="default" class="py-20">
+				<div class="glass rounded-2xl p-8 sm:p-12">
+					<p class="eyebrow mb-3">The Creator</p>
+					<h2 class="font-display text-3xl font-semibold sm:text-4xl">
+						I'm {AUTHOR_NAME.split(' ')[0]}.
+					</h2>
+					<p class="mt-4 max-w-2xl text-lg leading-relaxed text-[var(--text-muted)]">
+                        I write about things on my mind related to information security, homelabbing, and stuff I find interesting.
+						Follow along, or don't — it's a blog, not a commitment.
+					</p>
+					<div class="mt-6">
+						<Button href="/about" variant="ghost">More about me →</Button>
+					</div>
+				</div>
+			</Section>
+
+			<!-- Sivablue teaser -->
+			<Section width="wide" class="pb-24">
+				<a
+					href="/sivablue"
+					class="group relative block overflow-hidden rounded-2xl border border-[var(--border)] bg-gradient-to-br from-deep-800 via-deep-700 to-sivablue-700 p-10 text-white no-underline transition hover:border-sivablue-400"
+				>
+					<div class="pointer-events-none absolute inset-0 opacity-60 [background:radial-gradient(500px_250px_at_80%_0%,rgba(34,211,238,0.4),transparent_70%)]"></div>
+					<div class="relative flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+						<div>
+							<p class="text-xs font-bold uppercase tracking-[0.2em] text-sivablue-200">Project</p>
+							<h3 class="font-display mt-2 text-3xl font-semibold">Sivablue</h3>
+							<p class="mt-1 max-w-md text-sm text-white/75">
+								Find more information on my "Sivablue" project here →
+							</p>
+						</div>
+						<span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2.5 text-sm font-semibold backdrop-blur transition group-hover:bg-white/20">
+							Explore
+							<span aria-hidden="true">→</span>
+						</span>
+					</div>
+				</a>
+			</Section>
+		</main>
+		<Footer />
+	</body>
+</html>

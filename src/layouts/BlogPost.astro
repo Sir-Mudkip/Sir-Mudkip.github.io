@@ -1,0 +1,89 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Header from '../components/Header.astro';
+import Section from '../components/Section.astro';
+
+type Props = CollectionEntry<'blog'>['data'] & { id?: string };
+
+const { title, description, pubDate, updatedDate, heroImage, id } = Astro.props;
+
+let prev: CollectionEntry<'blog'> | undefined;
+let next: CollectionEntry<'blog'> | undefined;
+if (id) {
+	const posts = (await getCollection('blog')).sort(
+		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+	);
+	const idx = posts.findIndex((p) => p.id === id);
+	if (idx !== -1) {
+		next = posts[idx - 1];
+		prev = posts[idx + 1];
+	}
+}
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<article>
+				<Section width="narrow" class="pt-16 pb-8">
+					<p class="eyebrow mb-4">
+						<FormattedDate date={pubDate} />
+						{updatedDate && (
+							<span class="ml-2 normal-case tracking-normal text-[var(--text-muted)]/80">
+								· updated <FormattedDate date={updatedDate} />
+							</span>
+						)}
+					</p>
+					<h1 class="font-display text-4xl font-semibold leading-[1.1] tracking-tight sm:text-5xl">
+						{title}
+					</h1>
+					{description && (
+						<p class="mt-5 text-xl leading-relaxed text-[var(--text-muted)]">{description}</p>
+					)}
+				</Section>
+
+				{heroImage && (
+					<Section width="wide" class="py-6">
+						<div class="overflow-hidden rounded-2xl border border-[var(--border)]">
+							<Image src={heroImage} alt="" width={1400} height={700} class="h-auto w-full object-cover" />
+						</div>
+					</Section>
+				)}
+
+				<Section width="narrow" class="pb-16">
+					<div class="prose">
+						<slot />
+					</div>
+				</Section>
+
+				{(prev || next) && (
+					<Section width="narrow" class="border-t border-[var(--border)] py-10">
+						<div class="grid gap-4 sm:grid-cols-2">
+							{prev ? (
+								<a href={`/blog/${prev.id}/`} class="group glass rounded-xl p-5 no-underline transition hover:border-[var(--accent)]">
+									<p class="eyebrow mb-2">Previous</p>
+									<p class="font-display text-lg font-semibold text-[var(--text)] group-hover:text-[var(--accent)]">{prev.data.title}</p>
+								</a>
+							) : <div />}
+							{next ? (
+								<a href={`/blog/${next.id}/`} class="group glass rounded-xl p-5 text-right no-underline transition hover:border-[var(--accent)]">
+									<p class="eyebrow mb-2">Next</p>
+									<p class="font-display text-lg font-semibold text-[var(--text)] group-hover:text-[var(--accent)]">{next.data.title}</p>
+								</a>
+							) : <div />}
+						</div>
+					</Section>
+				)}
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>

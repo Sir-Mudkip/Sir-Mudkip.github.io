@@ -1,0 +1,55 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+	post: CollectionEntry<'blog'>;
+	featured?: boolean;
+}
+
+const { post, featured = false } = Astro.props;
+const href = `/blog/${post.id}/`;
+---
+
+<a
+	href={href}
+	class:list={[
+		'group glass relative block overflow-hidden rounded-2xl transition hover:-translate-y-0.5 hover:border-[var(--accent)]',
+		featured ? 'md:grid md:grid-cols-2' : '',
+	]}
+>
+	{post.data.heroImage && (
+		<div class:list={['relative overflow-hidden', featured ? 'aspect-[16/10] md:aspect-auto md:h-full' : 'aspect-[16/9]']}>
+			<Image
+				src={post.data.heroImage}
+				alt=""
+				width={featured ? 1200 : 720}
+				height={featured ? 700 : 400}
+				class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+			/>
+			<div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition group-hover:opacity-100"></div>
+		</div>
+	)}
+	<div class:list={['flex flex-col gap-3 p-6', featured ? 'md:p-8' : '']}>
+		<span class="eyebrow">
+			<FormattedDate date={post.data.pubDate} />
+		</span>
+		<h3
+			class:list={[
+				'font-display font-semibold leading-[1.1] text-[var(--text)] transition group-hover:text-[var(--accent)]',
+				featured ? 'text-3xl md:text-4xl' : 'text-xl md:text-2xl',
+			]}
+		>
+			{post.data.title}
+		</h3>
+		{post.data.description && (
+			<p class="text-[var(--text-muted)] text-[0.95rem] leading-relaxed line-clamp-3">
+				{post.data.description}
+			</p>
+		)}
+		<span class="mt-auto inline-flex items-center gap-1 text-sm font-semibold text-[var(--accent)]">
+			Read <span aria-hidden="true" class="transition group-hover:translate-x-0.5">→</span>
+		</span>
+	</div>
+</a>

@@ -1,0 +1,130 @@
+---
+import { Image } from 'astro:assets';
+import MudkipAvatar from '../assets/Mudkip.png';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import Section from '../components/Section.astro';
+import { AUTHOR_NAME, SITE_TITLE, SOCIALS } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`About — ${SITE_TITLE}`} description={`About ${AUTHOR_NAME}`} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="aurora-bg">
+				<Section width="default" class="py-20 sm:py-24">
+					<div class="grid items-center gap-10 md:grid-cols-[auto_1fr]">
+						<div class="relative mx-auto md:mx-0">
+							<div class="absolute inset-0 -z-10 rounded-full bg-sivablue-400/30 blur-2xl"></div>
+							<div class="flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border border-[var(--border)] bg-[var(--surface-2)]">
+							<Image src={MudkipAvatar} alt={`${AUTHOR_NAME} avatar`} width={320} height={320} class="h-full w-full object-cover" />
+						</div>
+						</div>
+						<div>
+							<p class="eyebrow mb-4">About</p>
+							<h1 class="font-display text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl">
+								Hi, I'm {AUTHOR_NAME.split(' ')[0]}... aka "Sir Mudkip"
+							</h1>
+							<p class="mt-5 text-lg leading-relaxed text-[var(--text-muted)]">
+                                Welcome to my blog — This is essentially a dump of things on my mind.
+							</p>
+							<p class="mt-5 text-lg leading-relaxed text-[var(--text-muted)]">
+                                I'm a Penetration Tester former Presales Consultant specialising in Penetration Testing and GRC Services. I've worked with customers in every sector your can think of including Finance, Healthcare, Insurance, Public Sector, and more.
+                            </p>
+                            <p class="mt-5 text-lg leading-relaxed text-[var(--text-muted)]">
+                                As a consultant, my policy is very simple. I want to identify your issue, and tell you how to fix it. No buzzwords, no overconsulting, just providing the best service possible.
+                            </p>
+                            <p class="mt-5 text-lg leading-relaxed text-[var(--text-muted)]">
+                                I have a deep passion for Infrastructure testing, predominantly Cloud, Containerisation, DevOps, Kubernetes, and I'm developing an interest in Active Directory (and how it integrates with Cloud!)
+                            </p>
+						</div>
+					</div>
+				</Section>
+			</section>
+
+			<Section width="wide" class="py-16">
+				<div class="mb-10">
+					<p class="eyebrow mb-3">What you can expect</p>
+					<h2 class="font-display max-w-2xl text-3xl font-semibold leading-tight sm:text-4xl">
+                        A mix of my thoughts on Pentesting, Homelabbing, Cloud, and plenty of rabbit holes...
+					</h2>
+				</div>
+				<div class="grid gap-6 md:grid-cols-3">
+					{[
+						{ title: 'Pentesting Notes', body: 'Findings, techniques, and the occasional war story from engagements (redacted).' },
+                        { title: 'Study Notes/Tutorials', body: 'Guides on how to deploy services, showing off things I\'ve studied recently, and Homelabbing updates.' },
+                        { title: 'Miscellaneous Tech Mambles', body: 'Opinions, deep dives, and the odd rant about Linux, AI, and the state of the Industry.' },
+					].map((item) => (
+						<div class="glass rounded-2xl p-6">
+							<h3 class="font-display text-xl font-semibold text-[var(--text)]">{item.title}</h3>
+							<p class="mt-2 text-[var(--text-muted)] leading-relaxed">{item.body}</p>
+						</div>
+					))}
+				</div>
+			</Section>
+
+			<Section width="narrow" class="py-16">
+				<div class="mb-8">
+					<h2 class="font-display text-3xl font-semibold leading-tight sm:text-4xl">
+					Q&A
+					</h2>
+				</div>
+				<div class="prose">
+                    <p>
+                        Q: Where are you based?
+                    </p>
+                    <p>
+                        A: I'm based in the United Kingdom currently.
+                    </p>
+                    <p>
+                        Q: What are you studying at the moment?
+                    </p>
+                    <p>
+                        A: I am currently studying for AWS Solutions Architect Associate, and Offensive Security Certified Practictioner (OSCP)
+                    </p>
+					<p>
+                        Q: Why <em>"Sir Mudkip"?</em>
+                    </p>
+                    <p>
+                        A: I like Mudkip and I wanted a "hacker" alias... not much else to it!
+                    </p>
+					<p>
+					    Q: Where did <em>"Sir-Mudkip's Marsh"</em> come from?
+					</p>
+                    <p>
+                        A: Mudkip is a Pokemon who lives in the swampy areas of the Hoenn region... Makes sense for him to have a marsh!
+                    </p>
+				</div>
+			</Section>
+
+			{SOCIALS.length > 0 && (
+				<Section width="default" class="pb-24">
+					<div class="border-t border-[var(--border)] pt-10 text-center">
+						<p class="eyebrow mb-5">Find me elsewhere</p>
+						<ul class="flex flex-wrap justify-center gap-3">
+							{SOCIALS.map((link) => (
+								<li>
+									<a
+										href={link.href}
+										target="_blank"
+										rel="noopener noreferrer"
+										class="group inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface-2)] px-5 py-2.5 text-sm font-semibold text-[var(--text)] no-underline transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+									>
+										{link.label}
+										<span aria-hidden="true" class="text-[var(--accent)] transition group-hover:translate-x-0.5">↗</span>
+									</a>
+								</li>
+							))}
+						</ul>
+					</div>
+				</Section>
+			)}
+		</main>
+		<Footer />
+	</body>
+</html>
