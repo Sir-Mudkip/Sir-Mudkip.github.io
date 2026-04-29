@@ -7,7 +7,7 @@ import { defineConfig, fontProviders } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://sir-mudkip.github.io/',
+	site: 'https://blog.sir-mudkip.uk/',
 	integrations: [mdx(), sitemap()],
 	vite: {
 		plugins: [tailwindcss()],
